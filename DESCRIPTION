@@ -16,3 +16,5 @@ RoxygenNote: 7.1.1
 Imports: 
     dplyr,
     spotifyr
+URL: https://github.com/apsteinmetz/spotfuzz
+BugReports: https://github.com/apsteinmetz/spotfuzz/issues
