@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Crude fuzzy search for spotifyr package.  Iteratively changes search string to get looser if item is not found initially.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
