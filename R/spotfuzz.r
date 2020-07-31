@@ -106,6 +106,7 @@ fuzzy_search_spotify <- function(artists,tracks,progress=FALSE){
                     ignore.case = TRUE))
     # if title dissimilarity index is too great, reject.
     if(correct > 9) {
+      #dummy search to force NA tibble return
       retval <- quick_search_spotify("bogus artist","sfkasfwrq")
     } else{
       if(progress){
