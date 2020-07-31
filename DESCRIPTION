@@ -1,6 +1,6 @@
 Package: spotfuzz
-Title: Crude fuzzy search for spotifyr package.
-Version: 0.0.0.9000
+Title: Crude fuzzy search for spotifyr package
+Version: 1.0.0
 Authors@R: 
     person(given = "Art",
            family = "Steinmetz",
@@ -13,9 +13,9 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: spotifyr
 Imports: 
     dplyr,
-    spotifyr,
     stringr
 URL: https://github.com/apsteinmetz/spotfuzz
 BugReports: https://github.com/apsteinmetz/spotfuzz/issues

@@ -3,8 +3,8 @@
 #' Return essential metadata as a tibble containing
 #' artist, track name, album name, track number, release date and spotify track uri.
 #'
-#' @param artist string
-#' @param track string
+#' @param artist string with artist name
+#' @param track string with song name
 #'
 #' @return tibble(artist, track name, album name, track number, release date and spotify track uri)
 #' @export
@@ -55,8 +55,8 @@ quick_search_spotify <- function(artist,track){
 #' substially different.
 #' Vectorized along artist and track name.
 #' It's not perfect.
-#' @param artist string
-#' @param track string with song name
+#' @param artists string with artist name
+#' @param tracks string with song name
 #' @param progress logical. If true, show track being searched and whether search is successful
 #'
 #' @return tibble(artist, track name, album name, track number, release date and spotify track uri)
@@ -64,38 +64,39 @@ quick_search_spotify <- function(artist,track){
 #' @export
 #' @examples
 #' fuzzy_search_spotify("Rush","Tom Sawyer")
-fuzzy_search_spotify <- function(artist,track,progress=FALSE){
+fuzzy_search_spotify <- function(artists,tracks,progress=FALSE){
   # spotify won't do fuzzy searches but does partial completions well
   # so we can fake fuzzy
-  if(length(artist) != length(track)){
+  if(length(artists) != length(tracks)){
     stop('Artist and track lists not the same length')  #Error condition
   }
+  failure_count <- length(artists)
   retval_all <- tibble()
-  for (n in 1:length(artist)){
-    if(progress) cat(artist[n]," ",track[n],"\n")
+  for (n in 1:length(artists)){
+    if(progress) cat(artists[n]," ",tracks[n],"\n")
     # Try 1
-    retval <- quick_search_spotify(artist[n],track[n])
+    retval <- quick_search_spotify(artists[n],tracks[n])
     if(is.na(retval[1])){
       # Try 2
       #alt artist search term stripping "and the..." kinds of names
-      artist <-str_remove(artist[n],"( and the .+)|(&.+)|(w\\/.+)|(featuring .+)")
-      retval <- quick_search_spotify(artist[n],track[n])
+      artist_short <-str_remove(artists[n],"( and the .+)|(&.+)|(w\\/.+)|(featuring .+)")
+      retval <- quick_search_spotify(artist_short,tracks[n])
       if(is.na(retval[1])){
         # Try 3. Reduce song name to longest word in song name
         # order words in track name by length
-        track_words <- tibble(token = unlist(strsplit(track[n],split = " "))) %>%
+        track_words <- tibble(token = unlist(strsplit(tracks[n],split = " "))) %>%
           mutate(len = str_length(token)) %>%
           arrange(desc(len))
-        retval <- quick_search_spotify(artist[n],track_words$token[1])
+        retval <- quick_search_spotify(artist_short,track_words$token[1])
       }
       if(is.na(retval[1])){
         # Try 4 Reduce song name to second longest word in song name. End there.
-        retval <- quick_search_spotify(artist,track_words$token[2])
+        retval <- quick_search_spotify(artist_short,track_words$token[2])
         if (is.na(retval[1])) break
       }
     }
     # We got a match. Now check for false positives
-    front_str <- stringr::str_sub(track[n],end=10)
+    front_str <- stringr::str_sub(tracks[n],end=10)
     back_str <-stringr::str_sub(str_remove_all(retval$spot_track,"[[:punct:]]"),end=10)
     correct = adist(front_str,
                     back_str,
@@ -104,11 +105,14 @@ fuzzy_search_spotify <- function(artist,track,progress=FALSE){
     if(correct > 5) {
       retval <- quick_search_spotify("bogus artist","sfkasfwrq")
     } else{
-      if(progress) cat("success!\n")
+      if(progress){
+        failure_count <- failure_count - 1
+       cat("success!\n")
+      }
     }
     retval_all <- bind_rows(retval_all,retval)
   }
-
+  if(progress) cat(paste0(failure_count," failures out of ",length(artists)," tracks.\n"))
   return(retval_all)
 }
 

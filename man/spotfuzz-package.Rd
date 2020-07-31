@@ -4,7 +4,7 @@
 \name{spotfuzz-package}
 \alias{spotfuzz}
 \alias{spotfuzz-package}
-\title{spotfuzz: Crude fuzzy search for spotifyr package.}
+\title{spotfuzz: Crude fuzzy search for spotifyr package}
 \description{
 Crude fuzzy search for spotifyr package.  Iteratively changes search string to get looser if item is not found initially.
 }
