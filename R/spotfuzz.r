@@ -92,17 +92,20 @@ fuzzy_search_spotify <- function(artists,tracks,progress=FALSE){
       if(is.na(retval[1])){
         # Try 4 Reduce song name to second longest word in song name. End there.
         retval <- quick_search_spotify(artist_short,track_words$token[2])
-        if (is.na(retval[1])) break
+        if (is.na(retval[1])){
+          retval_all <- bind_rows(retval_all,retval)
+          next
+        }
       }
     }
     # We got a match. Now check for false positives
     front_str <- stringr::str_sub(tracks[n],end=10)
     back_str <-stringr::str_sub(str_remove_all(retval$spot_track,"[[:punct:]]"),end=10)
-    correct = adist(front_str,
+    correct = as.integer(adist(front_str,
                     back_str,
-                    ignore.case = TRUE)
+                    ignore.case = TRUE))
     # if title dissimilarity index is too great, reject.
-    if(correct > 5) {
+    if(correct > 9) {
       retval <- quick_search_spotify("bogus artist","sfkasfwrq")
     } else{
       if(progress){
