@@ -26,7 +26,8 @@ quick_search_spotify <- function(artist,track){
                   spot_album=NA,
                   track_number= NA,
                   release_date=NA,
-                  track_uri=NA)
+                  track_uri=NA,
+                  popularity = NA)
     )
   } else{
     metadata <- metadata[1,] %>%
@@ -36,7 +37,8 @@ quick_search_spotify <- function(artist,track){
                 spot_album=album.name,
                 track_number,
                 release_date=album.release_date,
-                track_uri=uri)
+                track_uri=uri,
+                popularity = popularity)
 
 
   }
