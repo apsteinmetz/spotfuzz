@@ -1,6 +1,6 @@
 Package: spotfuzz
 Title: Crude fuzzy search for spotifyr package
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: 
     person(given = "Art",
            family = "Steinmetz",
