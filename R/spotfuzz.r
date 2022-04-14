@@ -82,6 +82,10 @@ fuzzy_search_spotify <- function(artists,tracks,progress=FALSE){
       # Try 2
       #alt artist search term stripping "and the..." kinds of names
       artist_short <-str_remove(artists[n],"( and the .+)|(&.+)|(w\\/.+)|(featuring .+)")
+      # remove anything in parens
+      artist_short <-str_remove(artist_short,"\\(.+\\)")
+      # remove remastered label
+      artist_short <- str_remove("barm - 2045 remaster","( - )*([0-9]{4} )*[Rr]emaster(ed)*")
       retval <- quick_search_spotify(artist_short,tracks[n])
       if(is.na(retval[1])){
         # Try 3. Reduce song name to longest word in song name
